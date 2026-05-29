@@ -9,3 +9,6 @@ node_modules/
 
 # Claude local settings
 .claude/settings.local.json
+
+# Projects — each subfolder is its own git repo, not tracked here
+projects/
