@@ -13,21 +13,34 @@ This is NOT a normal web app. There is no npm, no bundler, no dev server. The bu
 
 **Always run `node build.js` after ANY change to see it in Rewst.**
 
+## Scripts
+
+| Script | What it does |
+|---|---|
+| `node build.js` | Builds the bass template's own example dist/ |
+| `node new-project.js <name>` | Creates a new project in `projects/<name>/` with its own git repo |
+| `node sync-libs.js` | Copies latest libs into every project in `projects/` and rebuilds their dist/ |
+
 ## File Structure
 
 ```
 dashboard-spa-main-template.html   # THE main file. HTML shell + all JS logic.
-build.js                           # Build script. Maps markers to files.
-dist/                              # Build output. This is what goes into Rewst.
+build.js                           # Builds the template's own example output.
+new-project.js                     # Creates a new connected project.
+sync-libs.js                       # Syncs libs to all projects + rebuilds their dist/.
+dist/                              # Build output for THIS template (the example).
 
-src/                               # Core libraries — shared across all pages
+src/                               # Canonical libs — source of truth for all projects
   rewst-dom-builder.js             # RewstDOM: tables, metric cards, autocomplete, alerts, etc.
   zip-graphql-js-lib-v2-optimized.js  # RewstApp: GraphQL API wrapper for Rewst platform
   rewst-override-tailwind.css      # Rewst brand CSS theme layered on Tailwind
 
-pages/                             # One JS file per sidebar page
+pages/                             # Reference pages
   components.js                    # Kitchen Sink — shows all available components
   starter.js                       # Blank starter page — copy this for new pages
+
+projects/                          # Your projects (gitignored — each is its own git repo)
+  my-app/                          # Auto-syncs libs from src/ on every build
 ```
 
 ## How to Add a New Page

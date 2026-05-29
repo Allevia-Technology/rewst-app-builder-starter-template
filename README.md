@@ -8,11 +8,25 @@ A barebones starter template for building single-page apps on the Rewst App Buil
 
 ## Quick Start
 
+### Use the template (build the example)
 1. Clone this repo
 2. Run `node build.js`
-3. Copy the contents of `dist/dashboard-spa-main-compiled.html` into a **HTML component** in Rewst App Builder
+3. Copy `dist/dashboard-spa-main-compiled.html` into a **HTML component** in Rewst App Builder
 
-That's it. The compiled file contains everything — CSS, JavaScript, and HTML — in a single file.
+### Start a new project
+```bash
+node new-project.js my-app-name
+cd projects/my-app-name
+node build.js
+```
+
+Creates `projects/my-app-name/` with its own git repo, pre-wired to auto-sync libs from this repo on every build.
+
+### Update libs across all your projects
+```bash
+git pull                 # get latest libs
+node sync-libs.js        # rebuild every project in projects/ with the latest
+```
 
 ## What's Included
 
@@ -36,16 +50,20 @@ That's it. The compiled file contains everything — CSS, JavaScript, and HTML �
 
 ```
 ├── dashboard-spa-main-template.html   # HTML shell with {{ MARKER }} placeholders
-├── build.js                           # Replaces markers with file contents
+├── build.js                           # Builds the template's own example dist/
+├── new-project.js                     # Creates a new project in projects/
+├── sync-libs.js                       # Rebuilds all projects/ with latest libs
 ├── dist/
 │   └── dashboard-spa-main-compiled.html  # Compiled output → paste into Rewst
-├── src/
-│   ├── rewst-dom-builder.js           # RewstDOM component library
-│   ├── zip-graphql-js-lib-v2-optimized.js  # RewstApp API wrapper
-│   └── rewst-override-tailwind.css    # Rewst theme CSS
-└── pages/
-    ├── components.js                  # Kitchen sink demo page
-    └── starter.js                     # Blank starter page
+├── src/                               # Canonical lib files (source of truth)
+│   ├── rewst-dom-builder.js
+│   ├── zip-graphql-js-lib-v2-optimized.js
+│   └── rewst-override-tailwind.css
+├── pages/
+│   ├── components.js                  # Kitchen sink demo page
+│   └── starter.js                     # Blank starter page
+└── projects/                          # Your projects live here (gitignored)
+    └── my-app/                        # Own git repo, auto-syncs from src/ on build
 ```
 
 ## How to Build
