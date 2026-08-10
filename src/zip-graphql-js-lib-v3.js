@@ -311,7 +311,11 @@ class RewstApp {
    * @param {string} triggerInstanceId - The trigger instance ID
    * @param {string} triggerId - The trigger ID
    * @param {object} inputData - Input data for the workflow (default: {})
-   * @param {object} options - Options object with optional onProgress callback
+   * @param {object} options - Options object with optional onProgress callback.
+   *   Optionally set runAsOrgId to run a PARENT-owned workflow in the context of a CHILD
+   *   org (for apps where sub-org users are logged in). When set, homeOrgId names the org
+   *   that owns the workflow (default: current org) and workflowId is passed through.
+   *   Omit runAsOrgId and behavior is unchanged.
    * @returns {Promise<object>} Result with output, triggerInfo, execution details
    */
   async runWorkflowWithTrigger(triggerInstanceId, triggerId, inputData = {}, options = {}) {
@@ -327,15 +331,23 @@ class RewstApp {
       throw error;
     }
 
-    const { onProgress } = options;
+    const { onProgress, runAsOrgId = null, homeOrgId = this.orgId, workflowId = null } = options;
 
     this._log('Executing workflow with trigger');
     this._log('Trigger ID:', triggerId);
     this._log('Trigger Instance ID:', triggerInstanceId);
     this._log('Input data:', inputData);
 
+    const runAsOrg = runAsOrgId
+      ? { targetOrgId: runAsOrgId, homeOrgId, workflowId }
+      : null;
+
+    if (runAsOrg) {
+      this._log('Cross-org execution — home org:', homeOrgId, '| running as:', runAsOrgId);
+    }
+
     try {
-      const execution = await this._executeWithTrigger(triggerInstanceId, triggerId, inputData);
+      const execution = await this._executeWithTrigger(triggerInstanceId, triggerId, inputData, runAsOrg);
       const executionId = execution.executionId;
 
       if (!executionId) {
@@ -5108,7 +5120,38 @@ async _fetchTriggerInfoBatched(executions, includeRawContext = false, options = 
     return result.testResult;
   }
 
-  async _executeWithTrigger(triggerInstanceId, triggerId, input) {
+  async _executeWithTrigger(triggerInstanceId, triggerId, input, runAsOrg = null) {
+    // runAsOrg opts into cross-org execution: run a workflow owned by a parent org in
+    // the context of a child org. Uses runWorkflowTrigger, the same mutation the Rewst
+    // platform's "Trigger Context Organization" test dialog sends. triggerInstance.orgId
+    // is what actually scopes the execution to the child org.
+    if (runAsOrg) {
+      const { targetOrgId, homeOrgId = this.orgId, workflowId = null } = runAsOrg;
+
+      const runQuery = `
+        mutation runTrigger($input: JSON, $triggerInstance: OrgTriggerInstanceInput!, $workflowId: ID) {
+          testResult: runWorkflowTrigger(triggerInstance: $triggerInstance, workflowId: $workflowId, input: $input) {
+            executionId
+          }
+        }
+      `;
+
+      const runResult = await this._graphql('runTrigger', runQuery, {
+        input,
+        workflowId,
+        triggerInstance: {
+          id: triggerInstanceId,
+          orgId: targetOrgId,
+          isManualActivation: true,
+          // organization.name is a required String! but its value is never read.
+          organization: { id: targetOrgId, name: 'Target Org' },
+          trigger: { id: triggerId, vars: [], orgId: homeOrgId }
+        }
+      });
+
+      return runResult.testResult;
+    }
+
     const query = `
       mutation testTrigger($input: JSON, $triggerInstance: OrgTriggerInstanceInput!) {
         testResult: testWorkflowTrigger(triggerInstance: $triggerInstance, input: $input) {
