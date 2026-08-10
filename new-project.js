@@ -104,7 +104,7 @@ if (fs.existsSync(BASS_SRC)) {
 // Map markers to source files
 const MARKERS = {
   '{{ CSS_THEME }}':      'src/rewst-override-tailwind.css',
-  '{{ GRAPHQL_LIB }}':   'src/zip-graphql-js-lib-v2-optimized.js',
+  '{{ GRAPHQL_LIB }}':   'src/zip-graphql-js-lib-v3.js',
   '{{ DOM_BUILDER }}':   'src/rewst-dom-builder.js',
   '{{ PAGE_COMPONENTS }}': 'pages/components.js',
   '{{ PAGE_STARTER }}':  'pages/starter.js',

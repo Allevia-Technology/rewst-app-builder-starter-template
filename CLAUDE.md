@@ -32,7 +32,7 @@ dist/                              # Build output for THIS template (the example
 
 src/                               # Canonical libs — source of truth for all projects
   rewst-dom-builder.js             # RewstDOM: tables, metric cards, autocomplete, alerts, etc.
-  zip-graphql-js-lib-v2-optimized.js  # RewstApp: GraphQL API wrapper for Rewst platform
+  zip-graphql-js-lib-v3.js  # RewstApp: GraphQL API wrapper for Rewst platform
   rewst-override-tailwind.css      # Rewst brand CSS theme layered on Tailwind
 
 pages/                             # Reference pages

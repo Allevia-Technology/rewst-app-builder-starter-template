@@ -39,7 +39,7 @@ node sync-libs.js        # rebuild every project in projects/ with the latest
 
 ### Core Libraries (src/)
 - **RewstDOM** (`rewst-dom-builder.js`) — UI component library: tables with sorting/search/pagination, metric cards, autocomplete, dropdowns, alerts, loading skeletons
-- **RewstApp** (`zip-graphql-js-lib-v2-optimized.js`) — Rewst GraphQL API wrapper: run workflows, submit forms, fetch executions, manage orgs
+- **RewstApp** (`zip-graphql-js-lib-v3.js`) — Rewst GraphQL API wrapper: run workflows, submit forms, fetch executions, manage orgs
 - **Rewst Theme** (`rewst-override-tailwind.css`) — Rewst brand colors and component styles layered on Tailwind CSS
 
 ### Pages
@@ -57,7 +57,7 @@ node sync-libs.js        # rebuild every project in projects/ with the latest
 │   └── dashboard-spa-main-compiled.html  # Compiled output → paste into Rewst
 ├── src/                               # Canonical lib files (source of truth)
 │   ├── rewst-dom-builder.js
-│   ├── zip-graphql-js-lib-v2-optimized.js
+│   ├── zip-graphql-js-lib-v3.js
 │   └── rewst-override-tailwind.css
 ├── pages/
 │   ├── components.js                  # Kitchen sink demo page
@@ -83,7 +83,7 @@ See [CLAUDE.md](CLAUDE.md) for step-by-step instructions on adding pages, using 
 | Marker | Source File |
 |--------|-------------|
 | `{{ CSS_THEME }}` | src/rewst-override-tailwind.css |
-| `{{ GRAPHQL_LIB }}` | src/zip-graphql-js-lib-v2-optimized.js |
+| `{{ GRAPHQL_LIB }}` | src/zip-graphql-js-lib-v3.js |
 | `{{ DOM_BUILDER }}` | src/rewst-dom-builder.js |
 | `{{ PAGE_COMPONENTS }}` | pages/components.js |
 | `{{ PAGE_STARTER }}` | pages/starter.js |

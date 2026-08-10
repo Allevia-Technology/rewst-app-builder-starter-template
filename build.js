@@ -16,7 +16,7 @@ const OUTPUT_PATH = path.join(REPO_ROOT, 'dist/dashboard-spa-main-compiled.html'
 // Markers in template and their corresponding source files
 const MARKERS = {
   '{{ CSS_THEME }}': 'src/rewst-override-tailwind.css',
-  '{{ GRAPHQL_LIB }}': 'src/zip-graphql-js-lib-v2-optimized.js',
+  '{{ GRAPHQL_LIB }}': 'src/zip-graphql-js-lib-v3.js',
   '{{ DOM_BUILDER }}': 'src/rewst-dom-builder.js',
   '{{ PAGE_COMPONENTS }}': 'pages/components.js',
   '{{ PAGE_STARTER }}': 'pages/starter.js',
