@@ -833,6 +833,188 @@ class RewstApp {
   }
 
   /**
+   * Resolve the form attached to a workflow, in the CURRENT org's context.
+   *
+   * Works for sub-org users reading a PARENT-owned form, which is the point: it goes via
+   * orgTriggerInstances (readable by sub-org users) rather than triggers/workflows/forms,
+   * all of which come back empty for a parent-owned object.
+   *
+   * @param {string} workflowId - The workflow whose form trigger you want
+   * @returns {Promise<object>} { triggerId, triggerName, formId, form, fieldNames }
+   */
+  async getWorkflowForm(workflowId) {
+    if (!this.isInitialized) {
+      const error = new Error('Rewst not initialized. Call rewst.init() first!');
+      this._error('getWorkflowForm called before initialization', error);
+      throw error;
+    }
+
+    if (!workflowId) {
+      const error = new Error('workflowId is required');
+      this._error('Invalid arguments provided to getWorkflowForm', error);
+      throw error;
+    }
+
+    this._log('Resolving form trigger for workflow:', workflowId, 'in org:', this.orgId);
+
+    const instancesQuery = `
+      query getOrgTriggerInstances($where: OrgTriggerInstanceWhereInput) {
+        orgTriggerInstances(where: $where) {
+          id
+          orgId
+          triggerId
+          trigger {
+            id
+            name
+            workflowId
+            enabled
+            formId
+          }
+        }
+      }
+    `;
+
+    const instancesResult = await this._graphql('getOrgTriggerInstances', instancesQuery, {
+      where: { orgId: this.orgId }
+    });
+
+    const instances = instancesResult.orgTriggerInstances || [];
+
+    // Filtered client-side: OrgTriggerInstanceWhereInput has no workflowId field.
+    const candidates = instances.filter(i =>
+      i.trigger && i.trigger.workflowId === workflowId && i.trigger.formId
+    );
+    const chosen = candidates.find(i => i.trigger.enabled) || candidates[0];
+
+    if (!chosen) {
+      throw new Error(
+        `No form trigger found for workflow ${workflowId} in org ${this.orgId}. ` +
+        `The workflow needs a form trigger activated for this org - a form is the only ` +
+        `route available to a user authenticated in a sub-org.`
+      );
+    }
+
+    const triggerId = chosen.trigger.id;
+    const formId = chosen.trigger.formId;
+    this._log('Found form trigger:', triggerId, 'form:', formId);
+
+    // evaluatedForm is keyed by orgId + triggerId and resolves a parent-owned form
+    const formQuery = `
+      query getEvaluatedForm($where: EvaluatedFormWhereInput!, $orgContextId: ID) {
+        evaluatedForm(where: $where, orgContextId: $orgContextId) {
+          id
+          name
+          orgId
+          fields {
+            id
+            type
+            index
+            schema
+          }
+        }
+      }
+    `;
+
+    const formResult = await this._graphql('getEvaluatedForm', formQuery, {
+      where: { orgId: this.orgId, triggerId },
+      orgContextId: this.orgId
+    });
+
+    const form = formResult.evaluatedForm || null;
+    const fields = (form && form.fields ? form.fields.slice() : [])
+      .sort((a, b) => (a.index || 0) - (b.index || 0));
+
+    if (form) {
+      form.fields = fields;
+    }
+
+    // Submitted keys must match these exactly or the server rejects the whole submission
+    const fieldNames = fields.map(f => (f.schema && (f.schema.name || f.schema.key)) || f.id);
+
+    if (!fields.length) {
+      this._log(
+        'WARNING: form has no fields. submitForm will fail with a bare "400: Bad Request" ' +
+        'until at least one field is added.'
+      );
+    }
+
+    return {
+      triggerId,
+      triggerName: chosen.trigger.name,
+      triggerInstanceId: chosen.id,
+      formId,
+      workflowId,
+      form,
+      fieldNames
+    };
+  }
+
+  /**
+   * Run a workflow by submitting its form, keyed on the workflow id you already have.
+   *
+   * THIS IS THE PATH THAT WORKS FOR SUB-ORG USERS. submitForm() is resolved by a different
+   * server resolver than the workflow-invoking mutations, and it does NOT go through
+   * verifyUserManagesOrg - so a user authenticated in a sub-org can run a PARENT-owned
+   * workflow this way. The execution is scoped to the current org.
+   *
+   * By contrast runWorkflow/runWorkflowSmart/runWorkflowWithTrigger all return AUTH_ERR
+   * for sub-org users, regardless of runAsOrgId.
+   *
+   * @param {string} workflowId - The workflow to run
+   * @param {object} formValues - Values keyed by form field name (see getWorkflowForm)
+   * @param {object} options - { waitForCompletion, onProgress, triggerId, formId, validate }
+   *   triggerId / formId - skip discovery if you already have them
+   *   validate - check keys against the form schema first (default true)
+   * @returns {Promise<object>} submitForm result, plus resolved form/trigger ids
+   */
+  async runWorkflowViaForm(workflowId, formValues = {}, options = {}) {
+    if (!this.isInitialized) {
+      const error = new Error('Rewst not initialized. Call rewst.init() first!');
+      this._error('runWorkflowViaForm called before initialization', error);
+      throw error;
+    }
+
+    if (!workflowId) {
+      const error = new Error('workflowId is required');
+      this._error('Invalid arguments provided to runWorkflowViaForm', error);
+      throw error;
+    }
+
+    const { validate = true, ...submitOptions } = options;
+    let { triggerId = null, formId = null } = options;
+    let resolved = null;
+
+    if (!triggerId || !formId) {
+      resolved = await this.getWorkflowForm(workflowId);
+      triggerId = triggerId || resolved.triggerId;
+      formId = formId || resolved.formId;
+    }
+
+    // Catch bad keys here rather than letting the server reject the whole submission
+    if (validate && resolved && resolved.fieldNames.length) {
+      const invalid = Object.keys(formValues).filter(k => !resolved.fieldNames.includes(k));
+      if (invalid.length) {
+        throw new Error(
+          `Invalid form field(s): ${invalid.join(', ')}. ` +
+          `Valid fields for this form: ${resolved.fieldNames.join(', ')}.`
+        );
+      }
+    }
+
+    this._log('Running workflow via form. workflow:', workflowId, 'form:', formId, 'as org:', this.orgId);
+
+    const result = await this.submitForm(formId, formValues, triggerId, submitOptions);
+
+    return {
+      ...result,
+      workflowId,
+      formId,
+      triggerId,
+      ranAsOrgId: this.orgId
+    };
+  }
+
+  /**
    * Get the most recent execution result for a workflow (optimized - no chunking)
    * Returns the same format as runWorkflowSmart() for easy drop-in replacement
    * @param {string} workflowId - The workflow ID to get last execution for
