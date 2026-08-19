@@ -313,9 +313,17 @@ class RewstApp {
    * @param {object} inputData - Input data for the workflow (default: {})
    * @param {object} options - Options object with optional onProgress callback.
    *   Optionally set runAsOrgId to run a PARENT-owned workflow in the context of a CHILD
-   *   org (for apps where sub-org users are logged in). When set, homeOrgId names the org
-   *   that owns the workflow (default: current org) and workflowId is passed through.
-   *   Omit runAsOrgId and behavior is unchanged.
+   *   org. When set, homeOrgId names the org that owns the workflow (default: current
+   *   org) and workflowId is passed through. Omit runAsOrgId and behavior is unchanged.
+   *
+   *   IMPORTANT - who may call this: the server gates every workflow-invoking mutation
+   *   behind verifyUserManagesOrg, so the AUTHENTICATED USER must manage the org that
+   *   owns the workflow. That makes runAsOrgId usable only from parent/MSP-context apps
+   *   (a parent user driving a child org). A user authenticated in the SUB-ORG cannot
+   *   run a parent-owned workflow this way - the API returns AUTH_ERR "Not Authorized",
+   *   and this is true of testWorkflowTrigger, runWorkflowTrigger, runWorkflow and
+   *   testWorkflow alike. For sub-org end users, use a form trigger via submitForm()
+   *   (forms have their own cross-org permission model) or a webhook trigger.
    * @returns {Promise<object>} Result with output, triggerInfo, execution details
    */
   async runWorkflowWithTrigger(triggerInstanceId, triggerId, inputData = {}, options = {}) {
@@ -4955,7 +4963,39 @@ async _fetchTriggerInfoBatched(executions, includeRawContext = false, options = 
 
     try {
       const result = await this._graphql('getTrigger', query, { id: triggerId });
-      return result.trigger;
+      if (result.trigger) {
+        return result.trigger;
+      }
+
+      // A sub-org user cannot read a PARENT-owned trigger directly - trigger(where:{id})
+      // resolves to null rather than erroring - but they CAN read it through their own
+      // org's trigger instance. Without this fallback, submitForm() fails for sub-org end
+      // users submitting a parent-owned form, which is the supported cross-org path.
+      this._log('trigger() returned null, falling back to orgTriggerInstances for:', triggerId);
+
+      const fallbackQuery = `
+        query getTriggerViaInstance($where: OrgTriggerInstanceWhereInput) {
+          orgTriggerInstances(where: $where) {
+            id
+            orgId
+            triggerId
+            trigger {
+              id
+              name
+              workflowId
+              enabled
+              formId
+            }
+          }
+        }
+      `;
+
+      const fallback = await this._graphql('getTriggerViaInstance', fallbackQuery, {
+        where: { orgId: this.orgId, triggerId }
+      });
+
+      return fallback.orgTriggerInstances?.[0]?.trigger || null;
+
     } catch (error) {
       this._error('Failed to get trigger info', error);
       throw error;
