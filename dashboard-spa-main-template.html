@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,6 +67,18 @@
       </div>
 
     </nav>
+
+    <!-- Theme Preference -->
+    <div class="theme-control border-t border-gray-200 p-4">
+      <label for="theme-toggle" class="theme-toggle-label" title="Use dark mode">
+        <span class="material-icons theme-toggle-icon" aria-hidden="true">light_mode</span>
+        <span class="nav-text">Dark mode</span>
+        <input id="theme-toggle" class="sr-only" type="checkbox" role="switch" aria-label="Use dark mode">
+        <span class="theme-switch-track" aria-hidden="true">
+          <span class="theme-switch-thumb"></span>
+        </span>
+      </label>
+    </div>
 
   </div>
 
@@ -182,6 +194,9 @@
     // Import RewstDOM builder
     {{ DOM_BUILDER }}
 
+    // Import theme manager (dark mode)
+    {{ THEME_MANAGER }}
+
     // App initialization
     (async function() {
 
@@ -202,6 +217,34 @@
       function debugError(...args) {
         if (window.DEBUG_MODE) console.error(...args);
       }
+
+      // ============================================
+      // THEME (DARK MODE)
+      // ============================================
+      // Applied before the first render so the page never flashes light-then-dark.
+      // RewstTheme's storage is duck-typed (load/save), so a small localStorage adapter
+      // is all it needs. Inside a sandboxed iframe localStorage can throw - the manager
+      // treats that as "theme applied, just not persisted" rather than failing.
+      const themePreferenceStore = {
+        async load(key) {
+          return window.localStorage.getItem(`rewst-${key}`);
+        },
+        async save(key, value) {
+          window.localStorage.setItem(`rewst-${key}`, value);
+        }
+      };
+
+      const themeManager = RewstTheme.createThemeManager({
+        document,
+        storage: themePreferenceStore,
+        onThemeChange: (theme) => debugLog('Theme applied:', theme)
+      });
+
+      await themeManager.init();
+      themeManager.bindToggle({
+        onPersistenceError: () => debugWarn('Theme changed for this session, but could not be saved')
+      });
+      window.themeManager = themeManager;
 
       // ============================================
       // INITIALIZE REWST

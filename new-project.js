@@ -106,6 +106,7 @@ const MARKERS = {
   '{{ CSS_THEME }}':      'src/rewst-override-tailwind.css',
   '{{ GRAPHQL_LIB }}':   'src/zip-graphql-js-lib-v3.js',
   '{{ DOM_BUILDER }}':   'src/rewst-dom-builder.js',
+  '{{ THEME_MANAGER }}': 'src/theme-manager.js',
   '{{ PAGE_COMPONENTS }}': 'pages/components.js',
   '{{ PAGE_STARTER }}':  'pages/starter.js',
 };

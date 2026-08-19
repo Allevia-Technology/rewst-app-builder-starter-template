@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,13 +55,32 @@
   --rewst-snooze: #504384;
   --rewst-quincy: #6a5445;
 
+  /* Theme surfaces */
+  --theme-page: #ECEFF1;
+  --theme-page-gradient-start: #f0f4f8;
+  --theme-page-gradient-end: #ffffff;
+  --theme-surface: #FFFFFF;
+  --theme-surface-muted: #ECEFF1;
+  --theme-surface-raised: #FFFFFF;
+  --theme-text: #333333;
+  --theme-text-strong: #000000;
+  --theme-text-muted: #90A4AE;
+  --theme-border: #CFD8DC;
+  --theme-grid: rgba(51, 51, 51, 0.10);
+  --theme-tooltip: rgba(17, 24, 39, 0.94);
+  --theme-overlay: rgba(255, 255, 255, 0.20);
+  --theme-trend-up: #10b981;
+  --theme-trend-up-fill: rgba(16, 185, 129, 0.10);
+  --theme-trend-down: #ef4444;
+  --theme-trend-down-fill: rgba(239, 68, 68, 0.10);
+
   /* Neutral Colors */
-  --rewst-black: #000000;
-  --rewst-dark-gray: #333333;
-  --rewst-gray: #90A4AE;
-  --rewst-light-gray: #CFD8DC;
-  --rewst-light: #ECEFF1;
-  --rewst-white: #FFFFFF;
+  --rewst-black: var(--theme-text-strong);
+  --rewst-dark-gray: var(--theme-text);
+  --rewst-gray: var(--theme-text-muted);
+  --rewst-light-gray: var(--theme-border);
+  --rewst-light: var(--theme-surface-muted);
+  --rewst-white: var(--theme-surface);
 
   /* Semantic Colors */
   --rewst-success: #2BB5B6;
@@ -83,8 +102,8 @@ html {
 body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: var(--rewst-dark-gray);
-  background-color: var(--rewst-light);
-  background: linear-gradient(to bottom, #f0f4f8 0%, #ffffff 100%),
+  background-color: var(--theme-page);
+  background: linear-gradient(to bottom, var(--theme-page-gradient-start) 0%, var(--theme-page-gradient-end) 100%),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
 
 }
@@ -1008,11 +1027,11 @@ select#form-selector {
 
 
 /* Toggle switch styling */
-input[type="checkbox"].sr-only:checked+.toggle-bg {
+#exclude-test-runs:checked+.toggle-bg {
   background-color: #009490 !important;
 }
 
-input[type="checkbox"].sr-only:focus+.toggle-bg {
+#exclude-test-runs:focus+.toggle-bg {
   box-shadow: 0 0 0 3px rgba(0, 148, 144, 0.2);
 }
 
@@ -1058,7 +1077,7 @@ input[type="checkbox"].sr-only:focus+.toggle-bg {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: white;
+  background: var(--theme-surface);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -1226,16 +1245,21 @@ input[type="checkbox"].sr-only:focus+.toggle-bg {
     FILTER SIDE BAR STYLING 
     ============================================ */
 
-/* Filter Drawer Styles */
-#filter-drawer.open,
+/* Advanced Filter Drawer Styles */
 #advanced-filter-drawer.open {
   transform: translateX(0);
 }
 
-#filter-overlay.open,
 #advanced-filter-overlay.open {
   display: block;
   opacity: 1;
+}
+
+/* Dropdown animations */
+#org-filter-dropdown,
+#date-filter-dropdown,
+#trigger-filter-dropdown {
+  animation: slideDown 0.2s ease-out;
 }
 
 @keyframes slideDown {
@@ -1608,6 +1632,291 @@ tbody tr:nth-child(10) { animation-delay: 270ms; }
 .session-expired-logo {
   animation: session-fall-over 2s ease-in-out forwards, session-gentle-rock 3s ease-in-out 2.2s infinite;
 }
+
+/* ============================================
+   PERSISTENT LIGHT / DARK THEME
+   ============================================ */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-page: #18242d;
+  --theme-page-gradient-start: #18242d;
+  --theme-page-gradient-end: #1d2b34;
+  --theme-surface: #24343e;
+  --theme-surface-muted: #30434f;
+  --theme-surface-raised: #2a3c47;
+  --theme-text: #e7eef2;
+  --theme-text-strong: #ffffff;
+  --theme-text-muted: #b7c5cd;
+  --theme-border: #4a616e;
+  --theme-grid: rgba(231, 238, 242, 0.18);
+  --theme-tooltip: rgba(16, 26, 33, 0.97);
+  --theme-overlay: rgba(16, 26, 33, 0.44);
+  --theme-trend-up: #72d6a1;
+  --theme-trend-up-fill: rgba(114, 214, 161, 0.12);
+  --theme-trend-down: #ff918d;
+  --theme-trend-down-fill: rgba(255, 145, 141, 0.12);
+  --theme-metric-teal: #247e80;
+  --theme-metric-fandango: #8b426f;
+  --theme-metric-orange: #946221;
+  --theme-metric-success: #29756c;
+  --theme-metric-error: #874746;
+  --theme-metric-warning: #946221;
+  --theme-metric-snooze: #5f5686;
+  --theme-metric-bask: #874746;
+
+  /* Brighter tints keep brand accents legible without becoming card backgrounds. */
+  --rewst-teal: #53cbc7;
+  --rewst-light-teal: #75d8d5;
+  --rewst-fandango: #e37bb9;
+  --rewst-orange: #ffc15c;
+  --rewst-bask: #ff8581;
+  --rewst-snooze: #a99dde;
+  --rewst-quincy: #c2aa9a;
+  --rewst-success: #64d4b0;
+  --rewst-warning: #ffc15c;
+  --rewst-error: #ff8581;
+  --rewst-info: #53cbc7;
+}
+
+.theme-toggle-label {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.25rem;
+  color: var(--theme-text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.theme-toggle-icon {
+  color: var(--rewst-teal);
+  font-size: 1.25rem;
+}
+
+.theme-switch-track {
+  position: relative;
+  display: inline-flex;
+  width: 2.5rem;
+  height: 1.375rem;
+  padding: 0.1875rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 9999px;
+  background: var(--theme-surface-muted);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-switch-thumb {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--theme-text-muted);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#theme-toggle:checked + .theme-switch-track {
+  border-color: var(--rewst-teal);
+  background: var(--rewst-teal);
+}
+
+#theme-toggle:checked + .theme-switch-track .theme-switch-thumb {
+  background: #ffffff;
+  transform: translateX(1.125rem);
+}
+
+#theme-toggle:focus-visible + .theme-switch-track {
+  outline: 3px solid rgba(43, 181, 182, 0.35);
+  outline-offset: 2px;
+}
+
+.sidebar.collapsed .theme-toggle-label {
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar.collapsed .theme-switch-track {
+  display: none;
+}
+
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] #main-content {
+  background-color: var(--theme-page);
+}
+
+:root[data-theme="dark"] .sidebar,
+:root[data-theme="dark"] #advanced-filter-drawer,
+:root[data-theme="dark"] .sticky-header,
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .insight-card,
+:root[data-theme="dark"] .rewst-table-container,
+:root[data-theme="dark"] table {
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
+}
+
+/* Preserve solid KPI identity with quieter colors that sit naturally on the
+   dark canvas and retain AA contrast with the cards' white content. */
+:root[data-theme="dark"] .card-metric-teal {
+  background: var(--theme-metric-teal);
+}
+
+:root[data-theme="dark"] .card-metric-fandango {
+  background: var(--theme-metric-fandango);
+}
+
+:root[data-theme="dark"] .card-metric-orange {
+  background: var(--theme-metric-orange);
+}
+
+:root[data-theme="dark"] .card-metric-success {
+  background: var(--theme-metric-success);
+}
+
+:root[data-theme="dark"] .card-metric-error {
+  background: var(--theme-metric-error);
+}
+
+:root[data-theme="dark"] .card-metric-warning {
+  background: var(--theme-metric-warning);
+}
+
+:root[data-theme="dark"] .card-metric-snooze {
+  background: var(--theme-metric-snooze);
+}
+
+:root[data-theme="dark"] .card-metric-bask {
+  background: var(--theme-metric-bask);
+}
+
+:root[data-theme="dark"] .card-metric:not([class*="card-metric-"]) .text-green-600 {
+  color: var(--theme-trend-up) !important;
+}
+
+:root[data-theme="dark"] .card-metric:not([class*="card-metric-"]) .text-red-600 {
+  color: var(--theme-trend-down) !important;
+}
+
+:root[data-theme="dark"] .card-success,
+:root[data-theme="dark"] .alert-success,
+:root[data-theme="dark"] .insight-empty-state {
+  background-color: rgba(43, 181, 182, 0.12);
+  color: var(--theme-text);
+}
+
+:root[data-theme="dark"] .card-warning,
+:root[data-theme="dark"] .alert-warning {
+  background-color: rgba(249, 161, 0, 0.12);
+  color: var(--theme-text);
+}
+
+:root[data-theme="dark"] .card-error,
+:root[data-theme="dark"] .alert-error {
+  background-color: rgba(247, 91, 88, 0.12);
+  color: var(--theme-text);
+}
+
+:root[data-theme="dark"] .alert-info {
+  background-color: rgba(0, 148, 144, 0.12);
+  color: var(--theme-text);
+}
+
+:root[data-theme="dark"] .loading-overlay {
+  background-color: var(--theme-overlay);
+}
+
+:root[data-theme="dark"] .loading-content {
+  background: rgba(36, 52, 62, 0.97);
+  border-color: var(--theme-border);
+}
+
+:root[data-theme="dark"] form input,
+:root[data-theme="dark"] form textarea,
+:root[data-theme="dark"] form select,
+:root[data-theme="dark"] input.form-input,
+:root[data-theme="dark"] textarea.form-input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] select.form-input,
+:root[data-theme="dark"] select#form-selector,
+:root[data-theme="dark"] #form-selector.form-input,
+:root[data-theme="dark"] div select#form-selector {
+  background-color: var(--theme-surface-raised) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] select.form-input,
+:root[data-theme="dark"] select#form-selector {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e7eef2' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 0.75rem !important;
+  padding-right: 2.5rem !important;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+:root[data-theme="dark"] thead,
+:root[data-theme="dark"] tbody tr:hover {
+  background-color: var(--theme-surface-muted);
+}
+
+:root[data-theme="dark"] .bg-white {
+  background-color: var(--theme-surface) !important;
+}
+
+:root[data-theme="dark"] .bg-gray-50,
+:root[data-theme="dark"] .bg-gray-100,
+:root[data-theme="dark"] .bg-gray-200,
+:root[data-theme="dark"] .bg-gray-300 {
+  background-color: var(--theme-surface-muted) !important;
+}
+
+:root[data-theme="dark"] .text-gray-900,
+:root[data-theme="dark"] .text-gray-700,
+:root[data-theme="dark"] .text-gray-600 {
+  color: var(--theme-text) !important;
+}
+
+:root[data-theme="dark"] .text-gray-500,
+:root[data-theme="dark"] .text-gray-400 {
+  color: var(--theme-text-muted) !important;
+}
+
+:root[data-theme="dark"] .border-gray-100,
+:root[data-theme="dark"] .border-gray-200,
+:root[data-theme="dark"] .border-gray-300,
+:root[data-theme="dark"] .border-gray-400,
+:root[data-theme="dark"] .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--theme-border) !important;
+}
+
+:root[data-theme="dark"] .hover\:bg-gray-50:hover,
+:root[data-theme="dark"] .hover\:bg-gray-100:hover,
+:root[data-theme="dark"] .hover\:bg-gray-200:hover,
+:root[data-theme="dark"] .hover\:bg-rewst-light:hover,
+:root[data-theme="dark"] .hover\:bg-rewst-light-gray:hover {
+  background-color: var(--theme-surface-muted) !important;
+}
+
+:root[data-theme="dark"] .hover\:text-gray-600:hover,
+:root[data-theme="dark"] .hover\:text-gray-700:hover,
+:root[data-theme="dark"] .hover\:text-rewst-black:hover {
+  color: var(--theme-text-strong) !important;
+}
+
+:root[data-theme="dark"] #org-filter-dropdown::-webkit-scrollbar-track,
+:root[data-theme="dark"] #trigger-filter-dropdown::-webkit-scrollbar-track {
+  background: var(--theme-surface-muted);
+}
+
+:root[data-theme="dark"] #org-filter-dropdown::-webkit-scrollbar-thumb,
+:root[data-theme="dark"] #trigger-filter-dropdown::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+}
+
   </style>
 </head>
 <body class="bg-rewst-light">
@@ -1649,6 +1958,18 @@ tbody tr:nth-child(10) { animation-delay: 270ms; }
       </div>
 
     </nav>
+
+    <!-- Theme Preference -->
+    <div class="theme-control border-t border-gray-200 p-4">
+      <label for="theme-toggle" class="theme-toggle-label" title="Use dark mode">
+        <span class="material-icons theme-toggle-icon" aria-hidden="true">light_mode</span>
+        <span class="nav-text">Dark mode</span>
+        <input id="theme-toggle" class="sr-only" type="checkbox" role="switch" aria-label="Use dark mode">
+        <span class="theme-switch-track" aria-hidden="true">
+          <span class="theme-switch-thumb"></span>
+        </span>
+      </label>
+    </div>
 
   </div>
 
@@ -1763,11 +2084,16 @@ tbody tr:nth-child(10) { animation-delay: 270ms; }
  * Rewst App Builder Library
  * @fileoverview Simple utilities for creating and manipulating DOM elements
  * @author Nick Zipse <nick.zipse@rewst.com>
- * @version 4.2.0
- * 
+ * @version 5.0.0 (v3)
+ *
  * A comprehensive JavaScript library for building custom apps in Rewst's App Builder.
  * Provides easy workflow execution, form submission, debugging tools, trigger analysis,
- * and form field conditional logic (show/hide based on other field values).
+ * form field conditional logic, AND full GraphQL API management for:
+ * - Tags (CRUD, assign to workflows/templates)
+ * - Workflows (list, search, update tags, update humanSecondsSaved, clone)
+ * - Scripts/Templates (list, get, update with tags, sync to clones)
+ * - Apps/Sites (create, update, publish, clone, pages)
+ * - Pages (create, update content via HTMLContainer)
  *
  * Quick Start:
  *   const rewst = new RewstApp({ debug: true });
@@ -2067,7 +2393,19 @@ class RewstApp {
    * @param {string} triggerInstanceId - The trigger instance ID
    * @param {string} triggerId - The trigger ID
    * @param {object} inputData - Input data for the workflow (default: {})
-   * @param {object} options - Options object with optional onProgress callback
+   * @param {object} options - Options object with optional onProgress callback.
+   *   Optionally set runAsOrgId to run a PARENT-owned workflow in the context of a CHILD
+   *   org. When set, homeOrgId names the org that owns the workflow (default: current
+   *   org) and workflowId is passed through. Omit runAsOrgId and behavior is unchanged.
+   *
+   *   IMPORTANT - who may call this: the server gates every workflow-invoking mutation
+   *   behind verifyUserManagesOrg, so the AUTHENTICATED USER must manage the org that
+   *   owns the workflow. That makes runAsOrgId usable only from parent/MSP-context apps
+   *   (a parent user driving a child org). A user authenticated in the SUB-ORG cannot
+   *   run a parent-owned workflow this way - the API returns AUTH_ERR "Not Authorized",
+   *   and this is true of testWorkflowTrigger, runWorkflowTrigger, runWorkflow and
+   *   testWorkflow alike. For sub-org end users, use a form trigger via submitForm()
+   *   (forms have their own cross-org permission model) or a webhook trigger.
    * @returns {Promise<object>} Result with output, triggerInfo, execution details
    */
   async runWorkflowWithTrigger(triggerInstanceId, triggerId, inputData = {}, options = {}) {
@@ -2083,15 +2421,23 @@ class RewstApp {
       throw error;
     }
 
-    const { onProgress } = options;
+    const { onProgress, runAsOrgId = null, homeOrgId = this.orgId, workflowId = null } = options;
 
     this._log('Executing workflow with trigger');
     this._log('Trigger ID:', triggerId);
     this._log('Trigger Instance ID:', triggerInstanceId);
     this._log('Input data:', inputData);
 
+    const runAsOrg = runAsOrgId
+      ? { targetOrgId: runAsOrgId, homeOrgId, workflowId }
+      : null;
+
+    if (runAsOrg) {
+      this._log('Cross-org execution — home org:', homeOrgId, '| running as:', runAsOrgId);
+    }
+
     try {
-      const execution = await this._executeWithTrigger(triggerInstanceId, triggerId, inputData);
+      const execution = await this._executeWithTrigger(triggerInstanceId, triggerId, inputData, runAsOrg);
       const executionId = execution.executionId;
 
       if (!executionId) {
@@ -2569,6 +2915,188 @@ class RewstApp {
   }
 
   /**
+   * Resolve the form attached to a workflow, in the CURRENT org's context.
+   *
+   * Works for sub-org users reading a PARENT-owned form, which is the point: it goes via
+   * orgTriggerInstances (readable by sub-org users) rather than triggers/workflows/forms,
+   * all of which come back empty for a parent-owned object.
+   *
+   * @param {string} workflowId - The workflow whose form trigger you want
+   * @returns {Promise<object>} { triggerId, triggerName, formId, form, fieldNames }
+   */
+  async getWorkflowForm(workflowId) {
+    if (!this.isInitialized) {
+      const error = new Error('Rewst not initialized. Call rewst.init() first!');
+      this._error('getWorkflowForm called before initialization', error);
+      throw error;
+    }
+
+    if (!workflowId) {
+      const error = new Error('workflowId is required');
+      this._error('Invalid arguments provided to getWorkflowForm', error);
+      throw error;
+    }
+
+    this._log('Resolving form trigger for workflow:', workflowId, 'in org:', this.orgId);
+
+    const instancesQuery = `
+      query getOrgTriggerInstances($where: OrgTriggerInstanceWhereInput) {
+        orgTriggerInstances(where: $where) {
+          id
+          orgId
+          triggerId
+          trigger {
+            id
+            name
+            workflowId
+            enabled
+            formId
+          }
+        }
+      }
+    `;
+
+    const instancesResult = await this._graphql('getOrgTriggerInstances', instancesQuery, {
+      where: { orgId: this.orgId }
+    });
+
+    const instances = instancesResult.orgTriggerInstances || [];
+
+    // Filtered client-side: OrgTriggerInstanceWhereInput has no workflowId field.
+    const candidates = instances.filter(i =>
+      i.trigger && i.trigger.workflowId === workflowId && i.trigger.formId
+    );
+    const chosen = candidates.find(i => i.trigger.enabled) || candidates[0];
+
+    if (!chosen) {
+      throw new Error(
+        `No form trigger found for workflow ${workflowId} in org ${this.orgId}. ` +
+        `The workflow needs a form trigger activated for this org - a form is the only ` +
+        `route available to a user authenticated in a sub-org.`
+      );
+    }
+
+    const triggerId = chosen.trigger.id;
+    const formId = chosen.trigger.formId;
+    this._log('Found form trigger:', triggerId, 'form:', formId);
+
+    // evaluatedForm is keyed by orgId + triggerId and resolves a parent-owned form
+    const formQuery = `
+      query getEvaluatedForm($where: EvaluatedFormWhereInput!, $orgContextId: ID) {
+        evaluatedForm(where: $where, orgContextId: $orgContextId) {
+          id
+          name
+          orgId
+          fields {
+            id
+            type
+            index
+            schema
+          }
+        }
+      }
+    `;
+
+    const formResult = await this._graphql('getEvaluatedForm', formQuery, {
+      where: { orgId: this.orgId, triggerId },
+      orgContextId: this.orgId
+    });
+
+    const form = formResult.evaluatedForm || null;
+    const fields = (form && form.fields ? form.fields.slice() : [])
+      .sort((a, b) => (a.index || 0) - (b.index || 0));
+
+    if (form) {
+      form.fields = fields;
+    }
+
+    // Submitted keys must match these exactly or the server rejects the whole submission
+    const fieldNames = fields.map(f => (f.schema && (f.schema.name || f.schema.key)) || f.id);
+
+    if (!fields.length) {
+      this._log(
+        'WARNING: form has no fields. submitForm will fail with a bare "400: Bad Request" ' +
+        'until at least one field is added.'
+      );
+    }
+
+    return {
+      triggerId,
+      triggerName: chosen.trigger.name,
+      triggerInstanceId: chosen.id,
+      formId,
+      workflowId,
+      form,
+      fieldNames
+    };
+  }
+
+  /**
+   * Run a workflow by submitting its form, keyed on the workflow id you already have.
+   *
+   * THIS IS THE PATH THAT WORKS FOR SUB-ORG USERS. submitForm() is resolved by a different
+   * server resolver than the workflow-invoking mutations, and it does NOT go through
+   * verifyUserManagesOrg - so a user authenticated in a sub-org can run a PARENT-owned
+   * workflow this way. The execution is scoped to the current org.
+   *
+   * By contrast runWorkflow/runWorkflowSmart/runWorkflowWithTrigger all return AUTH_ERR
+   * for sub-org users, regardless of runAsOrgId.
+   *
+   * @param {string} workflowId - The workflow to run
+   * @param {object} formValues - Values keyed by form field name (see getWorkflowForm)
+   * @param {object} options - { waitForCompletion, onProgress, triggerId, formId, validate }
+   *   triggerId / formId - skip discovery if you already have them
+   *   validate - check keys against the form schema first (default true)
+   * @returns {Promise<object>} submitForm result, plus resolved form/trigger ids
+   */
+  async runWorkflowViaForm(workflowId, formValues = {}, options = {}) {
+    if (!this.isInitialized) {
+      const error = new Error('Rewst not initialized. Call rewst.init() first!');
+      this._error('runWorkflowViaForm called before initialization', error);
+      throw error;
+    }
+
+    if (!workflowId) {
+      const error = new Error('workflowId is required');
+      this._error('Invalid arguments provided to runWorkflowViaForm', error);
+      throw error;
+    }
+
+    const { validate = true, ...submitOptions } = options;
+    let { triggerId = null, formId = null } = options;
+    let resolved = null;
+
+    if (!triggerId || !formId) {
+      resolved = await this.getWorkflowForm(workflowId);
+      triggerId = triggerId || resolved.triggerId;
+      formId = formId || resolved.formId;
+    }
+
+    // Catch bad keys here rather than letting the server reject the whole submission
+    if (validate && resolved && resolved.fieldNames.length) {
+      const invalid = Object.keys(formValues).filter(k => !resolved.fieldNames.includes(k));
+      if (invalid.length) {
+        throw new Error(
+          `Invalid form field(s): ${invalid.join(', ')}. ` +
+          `Valid fields for this form: ${resolved.fieldNames.join(', ')}.`
+        );
+      }
+    }
+
+    this._log('Running workflow via form. workflow:', workflowId, 'form:', formId, 'as org:', this.orgId);
+
+    const result = await this.submitForm(formId, formValues, triggerId, submitOptions);
+
+    return {
+      ...result,
+      workflowId,
+      formId,
+      triggerId,
+      ranAsOrgId: this.orgId
+    };
+  }
+
+  /**
    * Get the most recent execution result for a workflow (optimized - no chunking)
    * Returns the same format as runWorkflowSmart() for easy drop-in replacement
    * @param {string} workflowId - The workflow ID to get last execution for
@@ -3021,6 +3549,64 @@ class RewstApp {
       }
       throw wrappedError;
     }
+  }
+
+  /**
+   * Get ALL managed organizations recursively (all layers of sub-orgs).
+   * Uses getManagedOrganizations internally but walks the full tree.
+   * Limits concurrency to avoid overwhelming the server with parallel requests.
+   */
+  async getAllManagedOrganizations(parentOrgId = null, { concurrency = 5, onProgress = null } = {}) {
+    const targetOrgId = parentOrgId || this.orgId;
+    this._log(`Fetching ALL managed organizations (recursive) for org: ${targetOrgId}...`);
+
+    // Get the first level (includes the target org itself)
+    const firstLevel = await this.getManagedOrganizations(parentOrgId);
+
+    const seen = new Set(firstLevel.map(o => o.id));
+    const allOrgs = [...firstLevel];
+
+    // Collect child org IDs to explore (skip the target org itself)
+    let queue = firstLevel.filter(o => o.id !== targetOrgId).map(o => o.id);
+
+    // Helper: run tasks with a max concurrency limit
+    const runWithConcurrency = async (ids, fn) => {
+      const results = [];
+      let i = 0;
+      const runNext = async () => {
+        if (i >= ids.length) return;
+        const idx = i++;
+        results[idx] = await fn(ids[idx]).catch(() => []);
+        await runNext();
+      };
+      await Promise.all(Array.from({ length: Math.min(concurrency, ids.length) }, runNext));
+      return results;
+    };
+
+    while (queue.length > 0) {
+      const currentBatch = queue.splice(0, queue.length);
+      this._log(`Fetching children for ${currentBatch.length} orgs (concurrency: ${concurrency})...`);
+
+      const batchResults = await runWithConcurrency(currentBatch, orgId =>
+        this.getManagedOrganizations(orgId)
+          .then(orgs => orgs.filter(o => o.id !== orgId))
+      );
+
+      for (const orgs of batchResults) {
+        for (const org of orgs) {
+          if (!seen.has(org.id)) {
+            seen.add(org.id);
+            allOrgs.push(org);
+            queue.push(org.id);
+          }
+        }
+      }
+
+      if (onProgress) onProgress({ found: allOrgs.length });
+    }
+
+    this._log(`Retrieved ${allOrgs.length} total organizations across all layers`);
+    return allOrgs;
   }
 
   /**
@@ -6641,7 +7227,39 @@ async _fetchTriggerInfoBatched(executions, includeRawContext = false, options = 
 
     try {
       const result = await this._graphql('getTrigger', query, { id: triggerId });
-      return result.trigger;
+      if (result.trigger) {
+        return result.trigger;
+      }
+
+      // A sub-org user cannot read a PARENT-owned trigger directly - trigger(where:{id})
+      // resolves to null rather than erroring - but they CAN read it through their own
+      // org's trigger instance. Without this fallback, submitForm() fails for sub-org end
+      // users submitting a parent-owned form, which is the supported cross-org path.
+      this._log('trigger() returned null, falling back to orgTriggerInstances for:', triggerId);
+
+      const fallbackQuery = `
+        query getTriggerViaInstance($where: OrgTriggerInstanceWhereInput) {
+          orgTriggerInstances(where: $where) {
+            id
+            orgId
+            triggerId
+            trigger {
+              id
+              name
+              workflowId
+              enabled
+              formId
+            }
+          }
+        }
+      `;
+
+      const fallback = await this._graphql('getTriggerViaInstance', fallbackQuery, {
+        where: { orgId: this.orgId, triggerId }
+      });
+
+      return fallback.orgTriggerInstances?.[0]?.trigger || null;
+
     } catch (error) {
       this._error('Failed to get trigger info', error);
       throw error;
@@ -6806,7 +7424,38 @@ async _fetchTriggerInfoBatched(executions, includeRawContext = false, options = 
     return result.testResult;
   }
 
-  async _executeWithTrigger(triggerInstanceId, triggerId, input) {
+  async _executeWithTrigger(triggerInstanceId, triggerId, input, runAsOrg = null) {
+    // runAsOrg opts into cross-org execution: run a workflow owned by a parent org in
+    // the context of a child org. Uses runWorkflowTrigger, the same mutation the Rewst
+    // platform's "Trigger Context Organization" test dialog sends. triggerInstance.orgId
+    // is what actually scopes the execution to the child org.
+    if (runAsOrg) {
+      const { targetOrgId, homeOrgId = this.orgId, workflowId = null } = runAsOrg;
+
+      const runQuery = `
+        mutation runTrigger($input: JSON, $triggerInstance: OrgTriggerInstanceInput!, $workflowId: ID) {
+          testResult: runWorkflowTrigger(triggerInstance: $triggerInstance, workflowId: $workflowId, input: $input) {
+            executionId
+          }
+        }
+      `;
+
+      const runResult = await this._graphql('runTrigger', runQuery, {
+        input,
+        workflowId,
+        triggerInstance: {
+          id: triggerInstanceId,
+          orgId: targetOrgId,
+          isManualActivation: true,
+          // organization.name is a required String! but its value is never read.
+          organization: { id: targetOrgId, name: 'Target Org' },
+          trigger: { id: triggerId, vars: [], orgId: homeOrgId }
+        }
+      });
+
+      return runResult.testResult;
+    }
+
     const query = `
       mutation testTrigger($input: JSON, $triggerInstance: OrgTriggerInstanceInput!) {
         testResult: testWorkflowTrigger(triggerInstance: $triggerInstance, input: $input) {
@@ -6968,6 +7617,531 @@ async _fetchTriggerInfoBatched(executions, includeRawContext = false, options = 
     }
 
     return inputCount > 0 ? inputs : null;
+  }
+
+  // ============================================
+  // TAG MANAGEMENT
+  // ============================================
+
+  /**
+   * Get all tags for the current org
+   * @param {Object} options - { search, offset, limit, includeOrgs }
+   * @returns {Promise<Array>} Array of tag objects { id, name, color, description, orgId }
+   */
+  async getTags(options = {}) {
+    const { search = {}, offset = 0, limit = 100, includeOrgs = false } = options;
+    const orgFragment = includeOrgs ? `organizations { id name isEnabled }` : '';
+    const result = await this._graphql('getTags', `
+      query getTags($order: [[String!]!], $offset: Int, $where: TagWhereInput!, $search: TagSearchInput, $includeTagsWithNoOwner: Boolean) {
+        tags(search: $search, where: $where, order: $order, offset: $offset, includeTagsWithNoOwner: $includeTagsWithNoOwner) {
+          id name color description orgId ${orgFragment}
+        }
+      }`, { order: [['name', 'asc']], offset, where: { orgId: this.orgId }, search, includeTagsWithNoOwner: false });
+    return result?.tags || [];
+  }
+
+  /**
+   * Create a new tag
+   * @param {string} name - Tag name
+   * @param {Object} options - { color, description }
+   * @returns {Promise<Object>} Created tag { id, name, color, description, orgId }
+   */
+  async createTag(name, options = {}) {
+    const { color, description } = options;
+    const tag = { name, orgId: this.orgId };
+    if (color) tag.color = color;
+    if (description) tag.description = description;
+    const result = await this._graphql('createTag', `
+      mutation createTag($tag: TagCreateInput!) {
+        createTag(tag: $tag) { id name color description orgId }
+      }`, { tag });
+    return result?.createTag;
+  }
+
+  /**
+   * Update a tag
+   * @param {string} id - Tag ID
+   * @param {Object} updates - { name, color, description }
+   * @returns {Promise<Object>} Updated tag
+   */
+  async updateTag(id, updates = {}) {
+    const tag = { id, orgId: this.orgId, ...updates };
+    const result = await this._graphql('updateTag', `
+      mutation updateTag($tag: TagUpdateInput!) {
+        updateTag(tag: $tag) { id name color description orgId }
+      }`, { tag });
+    return result?.updateTag;
+  }
+
+  /**
+   * Delete a tag
+   * @param {string} id - Tag ID
+   * @returns {Promise<string>} Deleted tag ID
+   */
+  async deleteTag(id) {
+    const result = await this._graphql('deleteTag', `
+      mutation deleteTag($id: ID!) { deleteTag(id: $id) }`, { id });
+    return result?.deleteTag;
+  }
+
+  // ============================================
+  // WORKFLOW TAG MANAGEMENT
+  // ============================================
+
+  /**
+   * Get workflows with full details including tags
+   * @param {Object} options - { search, hasTagIds, excludeTagIds, limit, offset, order }
+   * @returns {Promise<Array>} Array of workflow objects with tags
+   */
+  async getWorkflowsWithTags(options = {}) {
+    const { search = {}, hasTagIds = [], excludeTagIds = [], limit = 50, offset = 0 } = options;
+    const result = await this._graphql('getWorkflows', `
+      query getWorkflows($hasTagIds: [ID!], $excludeTagIds: [ID!], $limit: Int, $offset: Int, $search: WorkflowSearch, $where: WorkflowWhereInput) {
+        workflows(hasTagIds: $hasTagIds, excludeTagIds: $excludeTagIds, limit: $limit, offset: $offset, search: $search, where: $where) {
+          id name type description humanSecondsSaved timeout isSynchronized clonedFromId createdAt updatedAt
+          tags { id name color description orgId }
+          triggers { name id enabled triggerType { name id ref } }
+          clones { id }
+          createdBy { username }
+          updatedBy { username }
+        }
+      }`, { hasTagIds, excludeTagIds, limit, offset, search, where: { orgId: this.orgId } });
+    return result?.workflows || [];
+  }
+
+  /**
+   * Set tags on a workflow (replaces all existing tags)
+   * @param {string} workflowId - Workflow ID
+   * @param {Array<string>} tagIds - Array of tag IDs to set
+   * @param {Object} options - { name, humanSecondsSaved, timeout, description }
+   * @returns {Promise<Object>} Updated workflow
+   */
+  async setWorkflowTags(workflowId, tagIds, options = {}) {
+    const workflow = { id: workflowId, tagIds, orgId: this.orgId, ...options };
+    const result = await this._graphql('updateWorkflow', `
+      mutation updateWorkflow($workflow: WorkflowInput!, $comment: String!) {
+        workflow: updateWorkflow(workflow: $workflow, comment: $comment, createPatch: true) {
+          id name tags { id name color } humanSecondsSaved
+        }
+      }`, { workflow, comment: options.comment || 'Updated via RewstApp lib' });
+    return result?.workflow;
+  }
+
+  /**
+   * Bulk set tags on multiple workflows
+   * @param {Array<string>} workflowIds - Array of workflow IDs
+   * @param {Array<string>} tagIds - Array of tag IDs to set on all workflows
+   * @returns {Promise<Array>} Updated workflows
+   */
+  async bulkSetWorkflowTags(workflowIds, tagIds) {
+    const result = await this._graphql('bulkSetWorkflowTags', `
+      mutation bulkSetWorkflowTags($workflowIds: [ID!]!, $tagIds: [ID!]!) {
+        bulkSetWorkflowTags(workflowIds: $workflowIds, tagIds: $tagIds) { id name tags { id name color } }
+      }`, { workflowIds, tagIds });
+    return result?.bulkSetWorkflowTags;
+  }
+
+  /**
+   * Update humanSecondsSaved on a workflow
+   * @param {string} workflowId - Workflow ID
+   * @param {number} seconds - Human seconds saved value
+   * @returns {Promise<Object>} Updated workflow
+   */
+  async setWorkflowTimeSaved(workflowId, seconds) {
+    return this.setWorkflowTags(workflowId, undefined, { humanSecondsSaved: seconds, comment: 'Updated time saved via RewstApp lib' });
+  }
+
+  // ============================================
+  // SCRIPTS / TEMPLATES
+  // ============================================
+
+  /**
+   * Get all scripts or templates
+   * @param {string} contentType - 'script' or 'template'
+   * @param {Object} options - { search, limit, offset, order }
+   * @returns {Promise<Array>} Array of template objects with tags
+   */
+  async getTemplates(contentType = 'script', options = {}) {
+    const { search = {}, limit = 50, offset = 0, order = [['name', 'desc']] } = options;
+    const result = await this._graphql('getTemplatesList', `
+      query getTemplatesList($order: [[String!]!], $limit: Int, $offset: Int, $search: TemplateSearch, $orgId: ID!, $contentType: String) {
+        templates(search: $search, order: $order, limit: $limit, offset: $offset, where: {orgId: $orgId, contentType: $contentType}) {
+          id createdAt updatedAt name description body contentType language isSynchronized clonedFromId
+          tags { id name color description orgId }
+          clones { id }
+          updatedBy { username }
+        }
+      }`, { order, limit, offset, search, orgId: this.orgId, contentType });
+    return result?.templates || [];
+  }
+
+  /**
+   * Get a single script/template by ID with full details
+   * @param {string} id - Template ID
+   * @returns {Promise<Object>} Template with tags, permissions, body
+   */
+  async getTemplate(id) {
+    const result = await this._graphql('getTemplate', `
+      query getTemplate($id: ID!, $orgId: ID!) {
+        template(where: {id: $id, orgId: $orgId}) {
+          id name description body contentType isSynchronized clonedFromId language isShared cloneOverrides
+          tags { id name color description orgId }
+          permission { id templateId roleIds authorizedForOrganizations { id name } override }
+        }
+      }`, { id, orgId: this.orgId });
+    return result?.template;
+  }
+
+  /**
+   * Update a script/template (body, tags, sync)
+   * @param {string} id - Template ID
+   * @param {Object} updates - { body, name, description, tags, isSynchronized, language, contentType }
+   * @returns {Promise<Object>} Updated template
+   */
+  async updateTemplate(id, updates = {}) {
+    const template = { id, ...updates };
+    if (!template.contentType) template.contentType = 'script';
+    const result = await this._graphql('updateTemplate', `
+      mutation updateTemplate($template: TemplateUpdateInput!) {
+        template: updateTemplate(template: $template) {
+          id name description body contentType isSynchronized language
+          tags { id name color description orgId }
+        }
+      }`, { template });
+    return result?.template;
+  }
+
+  /**
+   * Get synced clones of a template
+   * @param {string} id - Template ID
+   * @returns {Promise<Array>} Array of clone objects with sync status
+   */
+  async getTemplateSyncedClones(id) {
+    const result = await this._graphql('GetSyncedTemplateClones', `
+      query GetSyncedTemplateClones($id: ID!) {
+        clones: templates(where: {clonedFromId: $id}, search: {organization: {isEnabled: {_eq: true}, isDeleted: {_eq: false}}}) {
+          id name isSynchronized organization { id name }
+        }
+      }`, { id });
+    return result?.clones || [];
+  }
+
+  // ============================================
+  // CLONE / SYNC OPERATIONS (Universal)
+  // ============================================
+
+  /**
+   * Clone any object (workflow, template, site, form, page)
+   * @param {string} objectType - 'workflow' | 'template' | 'site' | 'form' | 'page'
+   * @param {string} id - Source object ID
+   * @param {string} targetOrgId - Target org ID
+   * @param {Object} options - { name, isSynchronized }
+   * @returns {Promise<Object>} Cloned object
+   */
+  async shallowClone(objectType, id, targetOrgId, options = {}) {
+    const { name } = options;
+    const typeMap = {
+      workflow: { mutation: 'shallowCloneWorkflow', returnType: 'Workflow' },
+      template: { mutation: 'shallowCloneTemplate', returnType: 'Template' },
+      site: { mutation: 'shallowCloneSite', returnType: 'Site' },
+      form: { mutation: 'shallowCloneForm', returnType: 'Form' },
+    };
+    const config = typeMap[objectType];
+    if (!config) throw new Error(`Invalid objectType: ${objectType}. Use: ${Object.keys(typeMap).join(', ')}`);
+    const overrides = name ? { name } : undefined;
+    const result = await this._graphql(config.mutation, `
+      mutation ${config.mutation}($id: ID!, $orgId: ID!, $overrides: ShallowCloneOverridesInput) {
+        ${config.mutation}(id: $id, orgId: $orgId, overrides: $overrides) { id name }
+      }`, { id, orgId: targetOrgId, overrides });
+    return result?.[config.mutation];
+  }
+
+  /**
+   * Unsync a clone (stop receiving updates from parent)
+   * @param {string} id - Clone ID
+   * @param {string} objectType - 'workflow' | 'template' | 'site' | 'form' | 'page' | 'trigger'
+   */
+  async unsyncClone(id, objectType) {
+    const result = await this._graphql('unsyncClone', `
+      mutation unsyncClone($id: ID!, $objectType: CloneableObjectType!) { unsyncClone(id: $id, objectType: $objectType) }
+    `, { id, objectType });
+    return result?.unsyncClone;
+  }
+
+  /**
+   * Unlink a clone (fully detach from parent)
+   * @param {string} id - Clone ID
+   * @param {string} objectType - 'workflow' | 'template' | 'site' | 'form' | 'page' | 'trigger'
+   */
+  async unlinkClone(id, objectType) {
+    const result = await this._graphql('unlinkClone', `
+      mutation unlinkClone($id: ID!, $objectType: CloneableObjectType!) { unlinkClone(id: $id, objectType: $objectType) }
+    `, { id, objectType });
+    return result?.unlinkClone;
+  }
+
+  // ============================================
+  // APPS / SITES
+  // ============================================
+
+  /**
+   * Get all apps for the current org
+   * @returns {Promise<Array>} Array of site objects
+   */
+  async getApps() {
+    const result = await this._graphql('getSitesForOrg', `
+      query getSitesForOrg($orgId: ID, $search: SiteSearchInput) {
+        sites(search: $search, where: {orgId: $orgId}) {
+          id name domain customDomain isLive statusCode statusMessage orgId createdAt updatedAt useCustomDomain
+          pages { id }
+          clonedFromId isSynchronized clones { id }
+          createdBy { username }
+          updatedBy { username }
+        }
+      }`, { orgId: this.orgId, search: {} });
+    return result?.sites || [];
+  }
+
+  /**
+   * Create a new app
+   * @param {string} name - App name
+   * @param {string} domain - Domain slug (e.g. 'my-app' becomes org-slug-my-app.rew.st)
+   * @param {Object} options - { theme }
+   * @returns {Promise<Object>} Created site { id, name, domain }
+   */
+  async createApp(name, domain, options = {}) {
+    const site = { name, domain, orgId: this.orgId };
+    if (options.theme) site.theme = options.theme;
+    const result = await this._graphql('createSite', `
+      mutation createSite($site: SiteCreateInput!) {
+        site: createSite(site: $site) { id name domain }
+      }`, { site });
+    return result?.site;
+  }
+
+  /**
+   * Update an app (name, publish, custom domain, etc.)
+   * @param {string} id - Site ID
+   * @param {Object} updates - { name, isLive, domain, customDomain, useCustomDomain, theme, isSynchronized }
+   * @returns {Promise<Object>} Updated site
+   */
+  async updateApp(id, updates = {}) {
+    const site = { id, ...updates };
+    const result = await this._graphql('updateSite', `
+      mutation updateSite($site: SiteUpdateInput!) {
+        updateSite(site: $site) { id name isLive statusCode statusMessage domain }
+      }`, { site });
+    return result?.updateSite;
+  }
+
+  /**
+   * Publish or unpublish an app
+   * @param {string} id - Site ID
+   * @param {boolean} live - true to publish, false to unpublish
+   * @returns {Promise<Object>} Updated site with status
+   */
+  async publishApp(id, live = true) {
+    return this.updateApp(id, { isLive: live });
+  }
+
+  /**
+   * Delete an app
+   * @param {string} id - Site ID
+   */
+  async deleteApp(id) {
+    await this._graphql('deleteSite', `mutation deleteSite($id: ID!) { deleteSite(id: $id) }`, { id });
+  }
+
+  // ============================================
+  // PAGES
+  // ============================================
+
+  /** Blank page preset (lzutf8+base64 encoded Craft.js ROOT Container) */
+  static BLANK_PAGE_PRESET = 'eyJST09UIjp7InR5cGXECHJlc29sdmVkTmFtZSI6IkNvbnRhaW5lciJ9LCJu0BQsImRpc3BsYXnRLiwicHJvcHPEUmlkIjoiQmxhbmsiLCJ3aWR0aCI6IjEwMCUiLCJoZWlnaHTIEH0sImN1c3RvbSI6e30sInBhcmVudCI6bnVsbCwiaXNDYW52YXMiOnRydWUsImhpZGRlbiI6ZmFsc2UsIm5vZGVzIjpbXSwibGlua2VkTsYRe319fQ==';
+
+  /**
+   * Get pages for a site
+   * @param {string} siteId - Site ID
+   * @returns {Promise<Array>} Array of page objects
+   */
+  async getPages(siteId) {
+    const result = await this._graphql('getPagesForSite', `
+      query getPagesForSite($siteId: ID!) {
+        pages(where: {siteId: $siteId}, order: [["name", "asc"]]) {
+          id name path orgId siteId createdAt updatedAt isSynchronized clonedFromId
+          clones { id }
+          createdBy { username }
+          updatedBy { username }
+        }
+      }`, { siteId });
+    return result?.pages || [];
+  }
+
+  /**
+   * Create a new page in an app
+   * @param {string} siteId - Site ID
+   * @param {string} name - Page name
+   * @param {string} path - URL path (e.g. 'my-page')
+   * @param {Object} options - { preset }
+   * @returns {Promise<Object>} Created page { id, name }
+   */
+  async createPage(siteId, name, path, options = {}) {
+    const page = { siteId, name, path: path || name.toLowerCase().replace(/\s+/g, '-'), orgId: this.orgId };
+    const preset = options.preset || RewstApp.BLANK_PAGE_PRESET;
+    const result = await this._graphql('createPage', `
+      mutation createPage($page: PageCreateInput!, $preset: String) {
+        page: createPage(page: $page, preset: $preset) { name id }
+      }`, { page, preset });
+    return result?.page;
+  }
+
+  /**
+   * Get the encoded page content (Craft.js node tree)
+   * @param {string} pageId - Page ID
+   * @returns {Promise<string>} Base64 encoded page content
+   */
+  async getPageContent(pageId) {
+    const result = await this._graphql('getPageNodes', `
+      query getPageNodes($where: PageWhereInput!) {
+        pageNodes(where: $where) { encoded }
+      }`, { where: { id: pageId } });
+    return result?.pageNodes?.encoded;
+  }
+
+  /**
+   * Set page content from an encoded string (copy content between pages)
+   * @param {string} pageId - Target page ID
+   * @param {string} siteId - Site ID
+   * @param {string} encodedNodes - Base64 encoded Craft.js node tree
+   * @returns {Promise<Object>} Updated page
+   */
+  async setPageContent(pageId, siteId, encodedNodes) {
+    const result = await this._graphql('updatePage', `
+      mutation updatePage($page: PageUpdateInput!) {
+        updatePage(page: $page) { id name updatedAt }
+      }`, { page: { id: pageId, siteId, pageNodes: encodedNodes } });
+    return result?.updatePage;
+  }
+
+  /**
+   * Build a page with an HTMLContainer and set its content
+   * @param {string} pageId - Target page ID
+   * @param {string} siteId - Site ID
+   * @param {string} htmlContent - Full HTML content for the HTMLContainer
+   * @returns {Promise<Object>} Updated page
+   */
+  async setPageHtml(pageId, siteId, htmlContent) {
+    const craftState = {
+      ROOT: {
+        type: { resolvedName: "Container" },
+        isCanvas: true,
+        props: {
+          id: "Blank", width: "100%", height: "100%",
+          margin: ["0","0","0","0"], padding: ["0","0","0","0"],
+          overflow: "auto", fillSpace: "no", resizable: true,
+          flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start",
+          background: { r: 255, g: 255, b: 255, a: 1 }, backgroundType: "paper",
+          color: { r: 0, g: 0, b: 0, a: 1 }, radius: 0, shadow: 0, overrideTheme: false,
+          templates: [], linkedPages: []
+        },
+        displayName: "Container", custom: {}, parent: null, hidden: false,
+        nodes: ["htmlNode1"], linkedNodes: {}
+      },
+      htmlNode1: {
+        type: { resolvedName: "HTMLContainer" },
+        isCanvas: false,
+        props: {
+          html: htmlContent,
+          size: {
+            width: { max: { unit: "%", value: 100 }, min: { unit: "%", value: 0 }, fixSize: 100, fixUnit: "%", sizeType: "fixed", fitToContent: false },
+            height: { max: { unit: "%", value: 100 }, min: { unit: "%", value: 0 }, fixSize: 100, fixUnit: "%", sizeType: "responsive", fitToContent: false }
+          },
+          margin: 0, padding: 0, styles: {},
+          templates: [], linkedPages: []
+        },
+        displayName: "HTMLContainer", custom: {}, parent: "ROOT", hidden: false,
+        nodes: [], linkedNodes: {}
+      }
+    };
+    const jsonStr = JSON.stringify(craftState);
+    // UTF-8 safe base64 encoding (btoa only handles Latin1)
+    const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+    return this.setPageContent(pageId, siteId, encoded);
+  }
+
+  /**
+   * Copy page content from one page to another
+   * @param {string} sourcePageId - Source page ID
+   * @param {string} targetPageId - Target page ID
+   * @param {string} targetSiteId - Target site ID
+   * @returns {Promise<Object>} Updated target page
+   */
+  async copyPageContent(sourcePageId, targetPageId, targetSiteId) {
+    const encoded = await this.getPageContent(sourcePageId);
+    if (!encoded) throw new Error('Source page has no content');
+    return this.setPageContent(targetPageId, targetSiteId, encoded);
+  }
+
+  /**
+   * Delete a page
+   * @param {string} id - Page ID
+   */
+  async deletePage(id) {
+    await this._graphql('deletePage', `mutation deletePage($id: ID!) { deletePage(id: $id) }`, { id });
+  }
+
+  // ============================================
+  // APP BUILDER (High-level orchestration)
+  // ============================================
+
+  /**
+   * Create a complete app with pages and HTML content
+   * @param {Object} config - { name, domain, pages: [{ name, path, html }], publish }
+   * @returns {Promise<Object>} { site, pages }
+   */
+  async buildApp(config) {
+    const { name, domain, pages = [], publish = false } = config;
+    this._log(`🏗️ Creating app: ${name}`);
+
+    // 1. Create the site
+    const site = await this.createApp(name, domain);
+    this._log(`✅ App created: ${site.id} (${site.domain})`);
+
+    // 2. Get the default pages (home + login are auto-created)
+    const defaultPages = await this.getPages(site.id);
+    this._log(`📄 Default pages: ${defaultPages.map(p => p.name).join(', ')}`);
+
+    // 3. Create additional pages and set content
+    const createdPages = [...defaultPages];
+    for (const pageConfig of pages) {
+      const isDefault = defaultPages.find(p => p.name === pageConfig.name || p.path === pageConfig.path);
+      let page;
+      if (isDefault) {
+        page = isDefault;
+        this._log(`📝 Using existing page: ${page.name}`);
+      } else {
+        page = await this.createPage(site.id, pageConfig.name, pageConfig.path);
+        createdPages.push(page);
+        this._log(`📝 Created page: ${page.name}`);
+      }
+
+      // Set HTML content if provided
+      if (pageConfig.html) {
+        await this.setPageHtml(page.id, site.id, pageConfig.html);
+        this._log(`🎨 Set HTML content on: ${page.name}`);
+      } else if (pageConfig.sourcePageId) {
+        await this.copyPageContent(pageConfig.sourcePageId, page.id, site.id);
+        this._log(`📋 Copied content to: ${page.name}`);
+      }
+    }
+
+    // 4. Publish if requested
+    if (publish) {
+      await this.publishApp(site.id);
+      this._log(`🚀 App published!`);
+    }
+
+    return { site, pages: createdPages };
   }
 
 }
@@ -10437,6 +11611,12 @@ const RewstDOM = {
       }
     };
     container.clear = () => clearSelection();
+    container.updateItems = (newItems) => {
+      items = newItems;
+      if (isDropdownOpen) {
+        showDropdown();
+      }
+    };
 
     return container;
   },
@@ -10948,6 +12128,178 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = RewstDOM;
 }
 
+    // Import theme manager (dark mode)
+    (function attachRewstTheme(root, factory) {
+  const api = factory();
+
+  if (typeof module === 'object' && module.exports) {
+    module.exports = api;
+  }
+
+  if (root) {
+    root.RewstTheme = api;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function createRewstThemeApi() {
+  const THEME_KEY = 'theme';
+  const DEFAULT_THEME = 'light';
+  const SUPPORTED_THEMES = new Set(['light', 'dark']);
+
+  function assertTheme(theme) {
+    if (!SUPPORTED_THEMES.has(theme)) {
+      throw new Error(`Unsupported theme: ${theme}`);
+    }
+    return theme;
+  }
+
+  function requestResult(request) {
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error || new Error('IndexedDB request failed'));
+    });
+  }
+
+  function createPreferenceStore({ getDatabase, storeName = 'preferences' }) {
+    if (typeof getDatabase !== 'function') {
+      throw new Error('Preference store requires a database provider');
+    }
+
+    return {
+      async load(key) {
+        const database = await getDatabase();
+        const store = database.transaction(storeName, 'readonly').objectStore(storeName);
+        const record = await requestResult(store.get(key));
+        return record?.value ?? null;
+      },
+
+      async save(key, value) {
+        const database = await getDatabase();
+        const store = database.transaction(storeName, 'readwrite').objectStore(storeName);
+        await requestResult(store.put({ key, value }));
+      },
+    };
+  }
+
+  function createThemeManager({ document, storage, onThemeChange = () => {} }) {
+    if (!document?.documentElement) {
+      throw new Error('Theme manager requires a document root');
+    }
+
+    let currentTheme = DEFAULT_THEME;
+    let toggleBound = false;
+
+    function syncControls(theme) {
+      const toggle = document.getElementById?.('theme-toggle');
+      const isDark = theme === 'dark';
+      const actionLabel = isDark ? 'Use light mode' : 'Use dark mode';
+
+      if (toggle) {
+        toggle.checked = isDark;
+        toggle.setAttribute?.('aria-checked', String(isDark));
+        toggle.setAttribute?.('aria-label', actionLabel);
+      }
+
+      const icon = document.querySelector?.('.theme-toggle-icon');
+      if (icon) icon.textContent = isDark ? 'light_mode' : 'dark_mode';
+
+      const label = document.querySelector?.('.theme-toggle-label');
+      if (label) label.title = actionLabel;
+    }
+
+    function applyTheme(theme) {
+      currentTheme = assertTheme(theme);
+      document.documentElement.dataset.theme = currentTheme;
+      syncControls(currentTheme);
+      onThemeChange(currentTheme);
+      return currentTheme;
+    }
+
+    const manager = {
+      async init() {
+        let storedTheme = null;
+        try {
+          storedTheme = await storage?.load?.(THEME_KEY);
+        } catch (_error) {
+          storedTheme = null;
+        }
+
+        return applyTheme(SUPPORTED_THEMES.has(storedTheme) ? storedTheme : DEFAULT_THEME);
+      },
+
+      async setTheme(theme) {
+        applyTheme(theme);
+        let persisted = true;
+
+        try {
+          await storage?.save?.(THEME_KEY, currentTheme);
+        } catch (_error) {
+          persisted = false;
+        }
+
+        return { theme: currentTheme, persisted };
+      },
+
+      async toggle() {
+        return this.setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+      },
+
+      bindToggle({ onPersistenceError = () => {} } = {}) {
+        const toggle = document.getElementById?.('theme-toggle');
+        if (!toggle?.addEventListener || toggleBound) return Boolean(toggle);
+
+        toggle.addEventListener('change', async () => {
+          const result = await manager.setTheme(toggle.checked ? 'dark' : 'light');
+          if (!result.persisted) onPersistenceError(result.theme);
+        });
+        toggleBound = true;
+        return true;
+      },
+
+      getTheme() {
+        return currentTheme;
+      },
+    };
+
+    return manager;
+  }
+
+  function refreshCharts(ChartApi, renderCurrentPage) {
+    if (ChartApi?.instances) {
+      const instances = typeof ChartApi.instances.values === 'function'
+        ? Array.from(ChartApi.instances.values())
+        : Object.values(ChartApi.instances);
+      instances.forEach(chart => chart?.destroy?.());
+    }
+
+    renderCurrentPage?.();
+  }
+
+  function readChartPalette(root, getComputedStyleFn) {
+    const styles = getComputedStyleFn(root);
+    const read = property => styles.getPropertyValue(property).trim();
+
+    return {
+      text: read('--theme-text'),
+      mutedText: read('--theme-text-muted'),
+      grid: read('--theme-grid'),
+      border: read('--theme-border'),
+      surface: read('--theme-surface'),
+      tooltipBackground: read('--theme-tooltip'),
+      trendUp: read('--theme-trend-up'),
+      trendUpFill: read('--theme-trend-up-fill'),
+      trendDown: read('--theme-trend-down'),
+      trendDownFill: read('--theme-trend-down-fill'),
+    };
+  }
+
+  return {
+    createPreferenceStore,
+    createThemeManager,
+    readChartPalette,
+    refreshCharts,
+  };
+});
+
+
     // App initialization
     (async function() {
 
@@ -10968,6 +12320,34 @@ if (typeof module !== 'undefined' && module.exports) {
       function debugError(...args) {
         if (window.DEBUG_MODE) console.error(...args);
       }
+
+      // ============================================
+      // THEME (DARK MODE)
+      // ============================================
+      // Applied before the first render so the page never flashes light-then-dark.
+      // RewstTheme's storage is duck-typed (load/save), so a small localStorage adapter
+      // is all it needs. Inside a sandboxed iframe localStorage can throw - the manager
+      // treats that as "theme applied, just not persisted" rather than failing.
+      const themePreferenceStore = {
+        async load(key) {
+          return window.localStorage.getItem(`rewst-${key}`);
+        },
+        async save(key, value) {
+          window.localStorage.setItem(`rewst-${key}`, value);
+        }
+      };
+
+      const themeManager = RewstTheme.createThemeManager({
+        document,
+        storage: themePreferenceStore,
+        onThemeChange: (theme) => debugLog('Theme applied:', theme)
+      });
+
+      await themeManager.init();
+      themeManager.bindToggle({
+        onPersistenceError: () => debugWarn('Theme changed for this session, but could not be saved')
+      });
+      window.themeManager = themeManager;
 
       // ============================================
       // INITIALIZE REWST
